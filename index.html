@@ -11,6 +11,24 @@
     />
   </head>
   <body>
+    <!-- Twitch Login Button -->
+    <button id="twitchLoginButton">Login with Twitch</button>
+
+    <!-- Display Twitch Username -->
+    <div id="twitchUsernameDisplay" style="display: none">
+      Logged in as: <span id="twitchUsername"></span>
+    </div>
+
+    <!-- Song Form -->
+    <button id="openFormButton" style="display: none">Add Song</button>
+    <form id="songForm" style="display: none">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" /><br />
+      <!-- Add input fields for other song properties -->
+      <button type="submit">Add</button>
+    </form>
+
+    <!-- Songs Table -->
     <table id="songsTable" class="display">
       <thead>
         <tr>
@@ -32,10 +50,35 @@
       </tbody>
     </table>
 
+    <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+
+    <!-- Your JavaScript Code -->
     <script>
       $(document).ready(function () {
+        // Twitch Login Button Click Handler
+        $("#twitchLoginButton").click(function () {
+          // Redirect the user to Twitch for authentication
+          window.location.href =
+            "https://id.twitch.tv/oauth2/authorize?client_id=n1vistizrmcpocmdii2a75sc382aos&redirect_uri=https://anthonyisme.github.io/Clone-Hero-Songs/&response_type=code&scope=user:read:email";
+          // Replace YOUR_CLIENT_ID and YOUR_REDIRECT_URI with your Twitch application's values
+        });
+
+        // Form Toggle Button Click Handler
+        $("#openFormButton").click(function () {
+          $("#songForm").toggle();
+        });
+
+        // Form Submission Handler
+        $("#songForm").submit(function (event) {
+          event.preventDefault();
+          // Here you can handle the form submission
+          // You can retrieve input values and add a new row to the table dynamically
+          // You may also want to update your JSON data or send it to a server
+        });
+
+        // Load Data from JSON
         $.getJSON("songs.json", function (data) {
           $.each(data, function (index, value) {
             $("#songsTable").append(
@@ -65,8 +108,18 @@
             );
           });
 
+          // Initialize DataTables
           $("#songsTable").DataTable();
         });
+
+        // Check if Twitch username exists in localStorage
+        var twitchUsername = localStorage.getItem("twitchUsername");
+        if (twitchUsername) {
+          // Display the Twitch username
+          $("#twitchUsername").text(twitchUsername);
+          $("#twitchUsernameDisplay").show();
+          $("#openFormButton").show(); // Show the form button when logged in
+        }
       });
     </script>
   </body>
