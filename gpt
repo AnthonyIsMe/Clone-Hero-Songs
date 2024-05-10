@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sortable Songs Table</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css"
+    />
+  </head>
+  <body>
+    <table id="songsTable" class="display">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Artist</th>
+          <th>Album</th>
+          <th>Genre</th>
+          <th>Charter</th>
+          <th>Year</th>
+          <th>Playlist</th>
+          <th>Lyrics</th>
+          <th>Modchart</th>
+          <th>Song Length</th>
+          <th>Charts Available</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Table body will be populated dynamically using JavaScript -->
+      </tbody>
+    </table>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script>
+      $(document).ready(function () {
+        $.getJSON("songs.json", function (data) {
+          $.each(data, function (index, value) {
+            $("#songsTable").append(
+              "<tr><td>" +
+                value.Name +
+                "</td><td>" +
+                value.Artist +
+                "</td><td>" +
+                value.Album +
+                "</td><td>" +
+                value.Genre +
+                "</td><td>" +
+                value.Charter +
+                "</td><td>" +
+                value.Year +
+                "</td><td>" +
+                value.Playlist +
+                "</td><td>" +
+                value.lyrics +
+                "</td><td>" +
+                value.modchart +
+                "</td><td>" +
+                value.songlength +
+                "</td><td>" +
+                value.chartsAvailable +
+                "</td></tr>"
+            );
+          });
+
+          $("#songsTable").DataTable();
+        });
+      });
+    </script>
+  </body>
+</html>
