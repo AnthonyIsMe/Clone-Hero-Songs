@@ -4,11 +4,65 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sortable Songs Table</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css"
-    />
+    <style>
+      /* Styling for body */
+      body {
+        background-color: #333; /* Darker background color */
+        color: #fff; /* Text color */
+        font-family: Arial, sans-serif; /* Font family */
+      }
+
+      /* Styling for table */
+      #songsTable {
+        background-color: #444; /* Slightly lighter background color for table */
+        border-collapse: collapse; /* Collapse table borders */
+        width: 100%; /* Table width */
+      }
+
+      #songsTable th {
+        background-color: lightblue; /* Light blue background color for column headers */
+        color: #333; /* Text color */
+        padding: 10px; /* Padding */
+        text-align: left; /* Text alignment */
+      }
+
+      #songsTable th,
+      #songsTable td {
+        border: 1px solid #666; /* Border color */
+        padding: 8px; /* Padding */
+      }
+
+      /* Styling for Twitch Login Button */
+      #twitchLoginButton {
+        background-color: #6441a5; /* Button background color */
+        color: #fff; /* Button text color */
+        border: none; /* Remove button border */
+        padding: 10px 20px; /* Padding */
+        font-size: 16px; /* Font size */
+        cursor: pointer; /* Cursor style */
+        align-content: flex-end;
+      }
+
+      /* Styling for Twitch Username Display */
+      #twitchUsernameDisplay {
+        margin-top: 10px; /* Margin from the top */
+      }
+
+      /* Styling for Song Form */
+      #songForm {
+        margin-top: 20px; /* Margin from the top */
+      }
+
+      /* Styling for Add Song Button */
+      #openFormButton {
+        background-color: #4caf50; /* Button background color */
+        color: #fff; /* Button text color */
+        border: none; /* Remove button border */
+        padding: 10px 20px; /* Padding */
+        font-size: 16px; /* Font size */
+        cursor: pointer; /* Cursor style */
+      }
+    </style>
   </head>
   <body>
     <!-- Twitch Login Button -->
@@ -20,19 +74,21 @@
     </div>
 
     <!-- Song Form -->
-    <button id="openFormButton" style="display: none">Add Song</button>
+    <button id="openFormButton">Add Song</button>
     <form id="songForm" style="display: none">
       <label for="name">Name:</label>
       <input type="text" id="name" name="name" /><br />
+      <label for="song-url">Song URL:</label>
+      <input type="song-url" id="song-url" name="song-url" /><br />
       <!-- Add input fields for other song properties -->
       <button type="submit">Add</button>
     </form>
 
     <!-- Songs Table -->
-    <table id="songsTable" class="display">
+    <table id="songsTable">
       <thead>
         <tr>
-          <th>Name</th>
+          <th style="background-color: lightblue">Name</th>
           <th>Artist</th>
           <th>Album</th>
           <th>Genre</th>
@@ -95,7 +151,12 @@
           });
 
           // Initialize DataTables
-          $("#songsTable").DataTable();
+          $("#songsTable").DataTable({
+            lengthMenu: [
+              [50, 100, 150, -1],
+              [50, 100, 150, "All"],
+            ],
+          });
         });
 
         // Check if Twitch username exists in localStorage
