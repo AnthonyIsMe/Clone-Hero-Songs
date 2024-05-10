@@ -62,6 +62,32 @@
         font-size: 16px; /* Font size */
         cursor: pointer; /* Cursor style */
       }
+      
+      #container {
+            display: flex;
+        }
+
+        #sidebar {
+            width: 200px; /* Adjust width as needed */
+            display: flex;
+            flex-direction: column;
+        }
+        .active {
+  background-color: #ff5733; /* Change to desired active color */
+}
+
+        #sidebar button {
+            /* flex-grow: 1; */
+            height: 40px; /* Adjust the height as needed */
+            margin-bottom: 5px; /* Add margin between buttons */
+        }
+
+        #tableContainer {
+            flex-grow: 1;
+            margin-left: 20px; /* Adjust margin to leave space between sidebar and table */
+        }
+        /* CSS class for active state of filter buttons */
+
     </style>
   </head>
   <body>
@@ -83,8 +109,21 @@
       <!-- Add input fields for other song properties -->
       <button type="submit">Add</button>
     </form>
-
+    <div id="container">
+        <div id="sidebar">
+            <button id="1930" onclick="toggleFilterByDecade(1930, 1939)">1930s</button>
+            <button id="1940" onclick="toggleFilterByDecade(1940, 1949)">1940s</button>
+            <button id="1950" onclick="toggleFilterByDecade(1950, 1959)">1950s</button>
+            <button id="1960" onclick="toggleFilterByDecade(1960, 1969)">1960s</button>
+            <button id="1970" onclick="toggleFilterByDecade(1970, 1979)">1970s</button>
+            <button id="1980" onclick="toggleFilterByDecade(1980, 1989)">1980s</button>
+            <button id="1990" onclick="toggleFilterByDecade(1990, 1999)">1990s</button>
+            <button id="2000" onclick="toggleFilterByDecade(2000, 2009)">2000s</button>
+            <button id="2010" onclick="toggleFilterByDecade(2010, 2019)">2010s</button>
+            <button id="2020" onclick="toggleFilterByDecade(2020, 2029)">2020s</button>
+        </div>
     <!-- Songs Table -->
+    <div id="tableContainer"></div>
     <table id="songsTable">
       <thead>
         <tr>
@@ -101,7 +140,8 @@
         <!-- Table body will be populated dynamically using JavaScript -->
       </tbody>
     </table>
-
+</div>
+</div>
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
@@ -168,6 +208,51 @@
           $("#openFormButton").show(); // Show the form button when logged in
         }
       });
+      var filterStates = {
+        1930: false,
+        1940: false,
+        1950: false,
+        1960: false,
+        1970: false,
+        1980: false,
+        1990: false,
+        2000: false,
+        2010: false,
+        2020: false,
+      };
+     // Function to toggle filter for a decade
+     function toggleFilterByDecade(startYear, endYear) {
+    var table = $("#songsTable").DataTable();
+    var button = $("#" + startYear);
+
+    // Toggle active state of the button
+    button.toggleClass("active");
+
+    // Update filter state
+    filterStates[startYear] = !filterStates[startYear];
+
+    // Clear existing search
+    table.search("").draw();
+
+    // Apply or remove filter based on state
+    var activeFilters = Object.keys(filterStates).filter(year => filterStates[year]);
+    if (activeFilters.length > 0) {
+        var yearsToDisplay = [];
+        activeFilters.forEach(year => {
+            for (let i = 0; i < 10; i++) {
+                yearsToDisplay.push(parseInt(year) + i);
+            }
+        });
+        var regex = "^(" + yearsToDisplay.join("|") + ")";
+        table.column(5).search(regex, true, false).draw(); // Search for individual years
+    } else {
+        table.column(5).search("").draw(); // Clear the search
+    }
+}
+
+
+
     </script>
   </body>
 </html>
+ 
