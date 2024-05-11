@@ -65,6 +65,7 @@
       
       #container {
             display: flex;
+            
         }
 
         #sidebar {
@@ -86,6 +87,34 @@
             flex-grow: 1;
             margin-left: 20px; /* Adjust margin to leave space between sidebar and table */
         }
+        @media screen and (max-width: 600px) {
+            /* Adjustments for smaller screens */
+            body {
+                font-size: 14px; /* Increase the base font size */
+            }
+            #twitchLoginButton,
+            #openFormButton {
+                padding: 12px 24px; /* Increase button padding */
+                font-size: 16px; /* Increase button font size */
+            }
+            #songsTable th,
+            #songsTable td {
+                font-size: 14px; /* Increase table cell font size */
+            }
+            #sidebar button {
+                height: 50px; /* Increase button height */
+                font-size: 16px; /* Increase button font size */
+            }
+            #container {
+                flex-direction: column; /* Adjust layout for smaller screens */
+            }
+            #sidebar {
+                width: 100%; /* Occupy full width on smaller screens */
+            }
+        }
+        #songsTable tbody tr:hover {
+    cursor: pointer;
+}
         /* CSS class for active state of filter buttons */
 
     </style>
@@ -156,7 +185,21 @@
             "https://id.twitch.tv/oauth2/authorize?client_id=n1vistizrmcpocmdii2a75sc382aos&redirect_uri=https://anthonyisme.github.io/Clone-Hero-Songs/&response_type=code&scope=user:read:email";
           // Replace YOUR_CLIENT_ID and YOUR_REDIRECT_URI with your Twitch application's values
         });
-
+        $('#songsTable tbody').on('click', 'tr', function () {
+        var rowData = $(this).find('td:first-child').text() + ' - ' + $(this).find('td:nth-child(2)').text();
+        navigator.clipboard.writeText(rowData)
+            .then(function () {
+                alert('Name and Artist copied to clipboard: ' + rowData);
+            })
+            .catch(function (error) {
+                console.error('Error copying to clipboard: ', error);
+            });
+    });
+    $('#songsTable tbody').on('mouseenter', 'tr', function () {
+        $(this).attr('title', 'Click to copy');
+    }).on('mouseleave', 'tr', function () {
+        $(this).removeAttr('title');
+    });
         // Form Toggle Button Click Handler
         $("#openFormButton").click(function () {
           $("#songForm").toggle();
@@ -255,4 +298,3 @@
     </script>
   </body>
 </html>
- 
