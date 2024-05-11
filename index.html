@@ -5,173 +5,194 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sortable Songs Table</title>
     <style>
-      /* Styling for body */
+      /* Global Styles */
       body {
-        background-color: #333; /* Darker background color */
-        color: #fff; /* Text color */
+        background-color: #575656; /* Lighter background color */
+        color: #ede9e9; /* Text color */
         font-family: Arial, sans-serif; /* Font family */
+        margin: 0;
+        padding: 0;
       }
 
-      /* Styling for table */
+      .container {
+        max-width: 1200px; /* Set maximum width for content */
+        margin: 0 auto; /* Center content horizontally */
+        padding: 20px;
+      }
+
+      /* Header Styles */
+      header {
+        background-color: #6441a5; /* Header background color */
+        color: #fff; /* Text color */
+        padding: 20px;
+        text-align: center;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 36px;
+      }
+
+      #twitchLoginButton,
+      #openFormButton {
+        background-color: #41a569; /* Button background color */
+        color: #fff; /* Button text color */
+        border: none; /* Remove button border */
+        padding: 10px 20px; /* Padding */
+        margin-right: 10px; /* Add margin between buttons */
+        cursor: pointer; /* Cursor style */
+      }
+
+      #twitchLoginButton:hover,
+      #openFormButton:hover {
+        background-color: #ff5733; /* Hover background co
+        lor */
+        transform: scale(110%) rotate(-2deg);
+      }
+
+      /* Sidebar Styles */
+      #sidebar {
+        background-color: #333; /* Sidebar background color */
+        color: #fff; /* Text color */
+        padding: 20px;
+        width: 200px;
+        float: left;
+      }
+
+      #sidebar h2 {
+        margin-top: 0;
+        font-size: 24px;
+      }
+
+      #sidebar button {
+        background-color: #6441a5; /* Button background color */
+        color: #fff; /* Button text color */
+        border: none; /* Remove button border */
+        border-radius: 80px;
+        padding: 10px 20px; /* Padding */
+        margin-bottom: 10px; /* Add margin between buttons */
+        width: 100%;
+        display: block;
+        text-align: center;
+        font-weight: 900;
+        font-size: larger;
+        cursor: pointer; /* Cursor style */
+      }
+      #sidebar button:hover {
+        transform: scale(110%);
+      }
+      #sidebar button.active {
+        background-color: #ff5733; /* Active button background color */
+      }
+
+      /* Table Styles */
+      #tableContainer {
+        margin-left: 240px; /* Adjust margin to leave space for sidebar */
+        padding: 20px;
+      }
+
       #songsTable {
-        background-color: #444; /* Slightly lighter background color for table */
+        background-color: #454445; /* Table background color */
         border-collapse: collapse; /* Collapse table borders */
         width: 100%; /* Table width */
       }
 
-      #songsTable th {
-        background-color: lightblue; /* Light blue background color for column headers */
-        color: #333; /* Text color */
-        padding: 10px; /* Padding */
-        text-align: left; /* Text alignment */
-      }
-
       #songsTable th,
       #songsTable td {
-        border: 1px solid #666; /* Border color */
+        border: 1px solid #262626; /* Border color */
         padding: 8px; /* Padding */
       }
 
-      /* Styling for Twitch Login Button */
-      #twitchLoginButton {
-        background-color: #6441a5; /* Button background color */
-        color: #fff; /* Button text color */
-        border: none; /* Remove button border */
-        padding: 10px 20px; /* Padding */
-        font-size: 16px; /* Font size */
-        cursor: pointer; /* Cursor style */
-        align-content: flex-end;
+      #songsTable th {
+        background-color: #6441a5; /* Header background color */
+        color: #ffffff; /* Text color */
+        text-align: left; /* Text alignment */
       }
 
-      /* Styling for Twitch Username Display */
-      #twitchUsernameDisplay {
-        margin-top: 10px; /* Margin from the top */
+      #songsTable tbody tr:hover {
+        background-color: #747373; /* Hover background color */
+        cursor: pointer;
       }
-
-      /* Styling for Song Form */
-      #songForm {
-        margin-top: 20px; /* Margin from the top */
-      }
-
-      /* Styling for Add Song Button */
-      #openFormButton {
-        background-color: #4caf50; /* Button background color */
-        color: #fff; /* Button text color */
-        border: none; /* Remove button border */
-        padding: 10px 20px; /* Padding */
-        font-size: 16px; /* Font size */
-        cursor: pointer; /* Cursor style */
-      }
-      
-      #container {
-            display: flex;
-            
-        }
-
-        #sidebar {
-            width: 200px; /* Adjust width as needed */
-            display: flex;
-            flex-direction: column;
-        }
-        .active {
-  background-color: #ff5733; /* Change to desired active color */
-}
-
-        #sidebar button {
-            /* flex-grow: 1; */
-            height: 40px; /* Adjust the height as needed */
-            margin-bottom: 5px; /* Add margin between buttons */
-        }
-
-        #tableContainer {
-            flex-grow: 1;
-            margin-left: 20px; /* Adjust margin to leave space between sidebar and table */
-        }
-        @media screen and (max-width: 600px) {
-            /* Adjustments for smaller screens */
-            body {
-                font-size: 14px; /* Increase the base font size */
-            }
-            #twitchLoginButton,
-            #openFormButton {
-                padding: 12px 24px; /* Increase button padding */
-                font-size: 16px; /* Increase button font size */
-            }
-            #songsTable th,
-            #songsTable td {
-                font-size: 14px; /* Increase table cell font size */
-            }
-            #sidebar button {
-                height: 50px; /* Increase button height */
-                font-size: 16px; /* Increase button font size */
-            }
-            #container {
-                flex-direction: column; /* Adjust layout for smaller screens */
-            }
-            #sidebar {
-                width: 100%; /* Occupy full width on smaller screens */
-            }
-        }
-        #songsTable tbody tr:hover {
-    cursor: pointer;
-    background-color: aquamarine;
-}
-        /* CSS class for active state of filter buttons */
-
     </style>
   </head>
   <body>
-    <!-- Twitch Login Button -->
-    <button id="twitchLoginButton">Login with Twitch</button>
+    <header>
+      <h1>Sortable Songs Table</h1>
+      <!-- Song Form -->
+      <button id="openFormButton">Add Song</button>
+      <form id="songForm" style="display: none">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" /><br />
+        <label for="song-url">Song URL:</label>
+        <input type="song-url" id="song-url" name="song-url" /><br />
+        <!-- Add input fields for other song properties -->
+        <button type="submit">Add</button>
+      </form>
+      <!-- Twitch Login Button -->
+      <button id="twitchLoginButton">Login with Twitch</button>
 
-    <!-- Display Twitch Username -->
-    <div id="twitchUsernameDisplay" style="display: none">
-      Logged in as: <span id="twitchUsername"></span>
+      <!-- Display Twitch Username -->
+      <div id="twitchUsernameDisplay" style="display: none">
+        Logged in as: <span id="twitchUsername"></span>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Sidebar -->
+      <div id="sidebar">
+        <h2>Filter by Decade</h2>
+        <button id="1930" onclick="toggleFilterByDecade(1930, 1939)">
+          1930s
+        </button>
+        <button id="1940" onclick="toggleFilterByDecade(1940, 1949)">
+          1940s
+        </button>
+        <button id="1950" onclick="toggleFilterByDecade(1950, 1959)">
+          1950s
+        </button>
+        <button id="1960" onclick="toggleFilterByDecade(1960, 1969)">
+          1960s
+        </button>
+        <button id="1970" onclick="toggleFilterByDecade(1970, 1979)">
+          1970s
+        </button>
+        <button id="1980" onclick="toggleFilterByDecade(1980, 1989)">
+          1980s
+        </button>
+        <button id="1990" onclick="toggleFilterByDecade(1990, 1999)">
+          1990s
+        </button>
+        <button id="2000" onclick="toggleFilterByDecade(2000, 2009)">
+          2000s
+        </button>
+        <button id="2010" onclick="toggleFilterByDecade(2010, 2019)">
+          2010s
+        </button>
+        <button id="2020" onclick="toggleFilterByDecade(2020, 2029)">
+          2020s
+        </button>
+      </div>
+
+      <!-- Songs Table -->
+      <div id="tableContainer">
+        <table id="songsTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Artist</th>
+              <th>Album</th>
+              <th>Genre</th>
+              <th>Charter</th>
+              <th>Year</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Table body will be populated dynamically using JavaScript -->
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <!-- Song Form -->
-    <button id="openFormButton">Add Song</button>
-    <form id="songForm" style="display: none">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" /><br />
-      <label for="song-url">Song URL:</label>
-      <input type="song-url" id="song-url" name="song-url" /><br />
-      <!-- Add input fields for other song properties -->
-      <button type="submit">Add</button>
-    </form>
-    <div id="container">
-        <div id="sidebar">
-            <button id="1930" onclick="toggleFilterByDecade(1930, 1939)">1930s</button>
-            <button id="1940" onclick="toggleFilterByDecade(1940, 1949)">1940s</button>
-            <button id="1950" onclick="toggleFilterByDecade(1950, 1959)">1950s</button>
-            <button id="1960" onclick="toggleFilterByDecade(1960, 1969)">1960s</button>
-            <button id="1970" onclick="toggleFilterByDecade(1970, 1979)">1970s</button>
-            <button id="1980" onclick="toggleFilterByDecade(1980, 1989)">1980s</button>
-            <button id="1990" onclick="toggleFilterByDecade(1990, 1999)">1990s</button>
-            <button id="2000" onclick="toggleFilterByDecade(2000, 2009)">2000s</button>
-            <button id="2010" onclick="toggleFilterByDecade(2010, 2019)">2010s</button>
-            <button id="2020" onclick="toggleFilterByDecade(2020, 2029)">2020s</button>
-        </div>
-    <!-- Songs Table -->
-    <div id="tableContainer"></div>
-    <table id="songsTable">
-      <thead>
-        <tr>
-          <th style="background-color: lightblue">Name</th>
-          <th>Artist</th>
-          <th>Album</th>
-          <th>Genre</th>
-          <th>Charter</th>
-          <th>Year</th>
-          <!-- Keep the <th> elements for sorting and searching functionality -->
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Table body will be populated dynamically using JavaScript -->
-      </tbody>
-    </table>
-</div>
-</div>
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
@@ -186,21 +207,27 @@
             "https://id.twitch.tv/oauth2/authorize?client_id=n1vistizrmcpocmdii2a75sc382aos&redirect_uri=https://anthonyisme.github.io/Clone-Hero-Songs/&response_type=code&scope=user:read:email";
           // Replace YOUR_CLIENT_ID and YOUR_REDIRECT_URI with your Twitch application's values
         });
-        $('#songsTable tbody').on('click', 'tr', function () {
-        var rowData = $(this).find('td:first-child').text() + ' - ' + $(this).find('td:nth-child(2)').text();
-        navigator.clipboard.writeText(rowData)
+        $("#songsTable tbody").on("click", "tr", function () {
+          var rowData =
+            $(this).find("td:first-child").text() +
+            " - " +
+            $(this).find("td:nth-child(2)").text();
+          navigator.clipboard
+            .writeText(rowData)
             .then(function () {
-                alert('Name and Artist copied to clipboard: ' + rowData);
+              alert("Name and Artist copied to clipboard: " + rowData);
             })
             .catch(function (error) {
-                console.error('Error copying to clipboard: ', error);
+              console.error("Error copying to clipboard: ", error);
             });
-    });
-    $('#songsTable tbody').on('mouseenter', 'tr', function () {
-        $(this).attr('title', 'Click to copy');
-    }).on('mouseleave', 'tr', function () {
-        $(this).removeAttr('title');
-    });
+        });
+        $("#songsTable tbody")
+          .on("mouseenter", "tr", function () {
+            $(this).attr("title", "Click to copy");
+          })
+          .on("mouseleave", "tr", function () {
+            $(this).removeAttr("title");
+          });
         // Form Toggle Button Click Handler
         $("#openFormButton").click(function () {
           $("#songForm").toggle();
@@ -264,38 +291,37 @@
         2010: false,
         2020: false,
       };
-     // Function to toggle filter for a decade
-     function toggleFilterByDecade(startYear, endYear) {
-    var table = $("#songsTable").DataTable();
-    var button = $("#" + startYear);
+      // Function to toggle filter for a decade
+      function toggleFilterByDecade(startYear, endYear) {
+        var table = $("#songsTable").DataTable();
+        var button = $("#" + startYear);
 
-    // Toggle active state of the button
-    button.toggleClass("active");
+        // Toggle active state of the button
+        button.toggleClass("active");
 
-    // Update filter state
-    filterStates[startYear] = !filterStates[startYear];
+        // Update filter state
+        filterStates[startYear] = !filterStates[startYear];
 
-    // Clear existing search
-    table.search("").draw();
+        // Clear existing search
+        table.search("").draw();
 
-    // Apply or remove filter based on state
-    var activeFilters = Object.keys(filterStates).filter(year => filterStates[year]);
-    if (activeFilters.length > 0) {
-        var yearsToDisplay = [];
-        activeFilters.forEach(year => {
+        // Apply or remove filter based on state
+        var activeFilters = Object.keys(filterStates).filter(
+          (year) => filterStates[year]
+        );
+        if (activeFilters.length > 0) {
+          var yearsToDisplay = [];
+          activeFilters.forEach((year) => {
             for (let i = 0; i < 10; i++) {
-                yearsToDisplay.push(parseInt(year) + i);
+              yearsToDisplay.push(parseInt(year) + i);
             }
-        });
-        var regex = "^(" + yearsToDisplay.join("|") + ")";
-        table.column(5).search(regex, true, false).draw(); // Search for individual years
-    } else {
-        table.column(5).search("").draw(); // Clear the search
-    }
-}
-
-
-
+          });
+          var regex = "^(" + yearsToDisplay.join("|") + ")";
+          table.column(5).search(regex, true, false).draw(); // Search for individual years
+        } else {
+          table.column(5).search("").draw(); // Clear the search
+        }
+      }
     </script>
   </body>
 </html>
