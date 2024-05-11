@@ -49,6 +49,26 @@
         lor */
         transform: scale(110%) rotate(-2deg);
       }
+      #songForm {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        color: black;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        z-index: 999; /* Ensure it's above other content */
+        transition: opacity 0.5s, visibility 0.5s; /* Add transition for opacity and visibility */
+        opacity: 0; /* Initially set opacity to 0 */
+        visibility: hidden; /* Initially set visibility to hidden */
+      }
+
+      #songForm.show {
+        opacity: 1; /* Set opacity to 1 when the form is shown */
+        visibility: visible; /* Set visibility to visible when the form is shown */
+      }
 
       /* Sidebar Styles */
       #sidebar {
@@ -231,6 +251,9 @@
         // Form Toggle Button Click Handler
         $("#openFormButton").click(function () {
           $("#songForm").toggle();
+        });
+        $("#openFormButton").click(function () {
+          $("#songForm").toggleClass("show"); // Toggle the 'show' class
         });
 
         // Form Submission Handler
