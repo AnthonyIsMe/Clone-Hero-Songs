@@ -411,6 +411,101 @@
           table.column(5).search("").draw(); // Clear the search
         }
       }
+      // Function to handle filter, search, and sort events
+      function handleFilterSearchSort() {
+        // Your existing code for other event handlers...
+
+        // Update URL when "Filter by Decade" button is clicked
+        $(".filter-decade-btn").click(function () {
+          const startYear = $(this).data("start");
+          const endYear = $(this).data("end");
+          const isActive = $(this).hasClass("active");
+
+          // Toggle active state of the button
+          $(this).toggleClass("active");
+
+          // Update URL with decade filter parameters
+          updateURLParams({
+            startYear,
+            endYear,
+            isActive: isActive ? "0" : "1",
+          });
+
+          // Apply or remove filter based on state
+          var activeFilters = Object.keys(filterStates).filter(
+            (year) => filterStates[year]
+          );
+          if (activeFilters.length > 0) {
+            var yearsToDisplay = [];
+            activeFilters.forEach((year) => {
+              for (let i = 0; i < 10; i++) {
+                yearsToDisplay.push(parseInt(year) + i);
+              }
+            });
+            var regex = "^(" + yearsToDisplay.join("|") + ")";
+            table.column(5).search(regex, true, false).draw(); // Search for individual years
+          } else {
+            table.column(5).search("").draw(); // Clear the search
+          }
+        });
+      }
+
+      // Function to update URL parameters
+      function updateURLParams(params) {
+        const queryParams = new URLSearchParams(window.location.search);
+        for (const [key, value] of Object.entries(params)) {
+          queryParams.set(key, value);
+        }
+        const newURL = window.location.pathname + "?" + queryParams.toString();
+        window.history.pushState({}, "", newURL);
+      }
+
+      // Function to handle filter, search, and sort events
+      function handleFilterSearchSort() {
+        // Example: Update URL when filter button is clicked
+        $("#filterButton").click(function () {
+          // Your filter logic here
+          // Example: Update URL with filter parameter
+          updateURLParams({ filter: "some_filter_value" });
+        });
+
+        // Example: Update URL when search is performed
+        $("#searchInput").on("keyup", function () {
+          // Your search logic here
+          // Example: Update URL with search parameter
+          updateURLParams({ search: $(this).val() });
+        });
+
+        // Example: Update URL when table is sorted
+        $("#songsTable").on("click", "th", function () {
+          const column = $(this).index();
+          const direction = "asc"; // Or 'desc' based on your sorting logic
+          // Example: Update URL with sort parameters
+          updateURLParams({ sortColumn: column, sortDirection: direction });
+        });
+      }
+
+      // Function to handle URL parameter changes
+      function handleURLParamsChange() {
+        window.addEventListener("popstate", function (event) {
+          // Handle URL parameter changes here
+          // Example: Fetch parameters from URL and update table accordingly
+          const queryParams = new URLSearchParams(window.location.search);
+          const filterValue = queryParams.get("filter");
+          const searchValue = queryParams.get("search");
+          const sortColumn = queryParams.get("sortColumn");
+          const sortDirection = queryParams.get("sortDirection");
+
+          // Update table based on URL parameters
+          // Example: Perform filtering, searching, sorting based on URL parameters
+        });
+      }
+
+      // Call functions to initialize URL handling
+      $(document).ready(function () {
+        handleFilterSearchSort();
+        handleURLParamsChange();
+      });
     </script>
   </body>
 </html>
