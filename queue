@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Queue Web App</title>
+    <style>
+      body {
+        background-color: #575656; /* Lighter background color */
+        color: #ffffff; /* Text color */
+        font-family: Arial, sans-serif; /* Font family */
+        margin: 0;
+        padding: 0;
+      }
+      p{
+        text-align: center;
+        font-weight: bold;
+        font-size: 20px;
+        color: #fe24c0;
+      }
+
+      h1,
+      h2 {
+        margin-bottom: 10px;
+        color: #ffc107;
+      }
+      #task-list,
+      #done-list {
+        border: 1px solid #555;
+        padding: 10px;
+        margin-bottom: 20px;
+        background-color: #333;
+        border-radius: 10px;
+      }
+      #task-list div,
+      #done-list div {
+        margin-bottom: 5px;
+      }
+      button {
+        padding: 5px 10px;
+        cursor: pointer;
+        /* background-color: #6c757d; */
+        color: #fff;
+        border: none;
+
+        border-radius: 3px;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #5a6268;
+      }
+      .task-item {
+        background-color: #8a8a8a;
+        padding: 10px;
+        border-radius: 20px;
+        display: flex;
+        justify-content: space-between; /* Align items to the start and end of the flex container */
+        align-items: center; /* Center items vertically */
+        margin-right: 10px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        user-select: none;
+      }
+      .task-item:first-child {
+        font-size: 25px;
+        font-weight: bold; /* Larger font size for the first task */
+      }
+      .complete-button {
+        background-color: #28a745; /* Green for the "Complete" button */
+        color: #fff;
+      }
+      .undo-button {
+        background-color: #dc3545; /* Red for the "Undo" button */
+        color: #fff;
+      }
+      /* Your CSS styles here */
+      .song-list-button {
+        background-color: #007bff; /* Blue color for the "Song List" button */
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        padding: 5px 10px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .song-list-button:hover {
+        background-color: #0056b3; /* Darker blue color on hover */
+      }
+      .container {
+        display: flex;
+      }
+
+      .task-container {
+        flex: 2; /* 2/3 of the container */
+        margin-right: 100px; /* Add some space between task and done containers */
+      }
+
+      .done-container {
+        flex: 1; /* 1/3 of the container */
+      }
+
+      .task-list,
+      .done-list {
+        border: 1px solid #555;
+        padding: 10px;
+        background-color: #333;
+        border-radius: 10px;
+        min-height: 50px;
+      }
+
+      .task-list div,
+      .done-list div {
+        margin-bottom: 5px;
+        
+      }
+    </style>
+  </head>
+  <header>
+    <a href="gpt"><button class="song-list-button">Song List</button></a>
+  </header>
+  <body>
+    <p>This is the song queue skeleton, it is not finished</p>
+    <div class="container">
+        <div class="task-input">
+            <input type="text" id="task-input" placeholder="Enter task">
+            <button onclick="addTask()">Add Task</button>
+        </div>
+        <div class="task-container">
+    <h1>Task Queue</h1>
+    <div id="task-list" class="task-list">
+      <!-- Tasks will be displayed here -->
+    </div>
+    </div>
+    <div class="done-container">
+    <h2>Done</h2>
+    <div id="done-list"  class="done-list">
+      <!-- Completed tasks will be displayed here -->
+    </div>
+</div>
+<script>
+// Define the createTaskElement function globally
+function createTaskElement(task, listType) {
+  const taskItem = document.createElement("div");
+  taskItem.textContent = task.name;
+  taskItem.classList.add("task-item");
+
+  const button = document.createElement("button");
+  if (listType === "task") {
+    button.textContent = "Complete";
+    button.classList.add("complete-button");
+    button.addEventListener("click", function () {
+      completeTask(task, taskItem);
+    });
+  } else if (listType === "done") {
+    button.textContent = "Undo";
+    button.classList.add("undo-button");
+    button.addEventListener("click", function () {
+      undoTask(task, taskItem);
+    });
+  }
+
+  taskItem.appendChild(button);
+  return taskItem;
+}
+
+// Define the completeTask function globally
+function completeTask(task, taskElement) {
+  const taskList = document.getElementById("task-list");
+  const doneList = document.getElementById("done-list");
+
+  // Remove task from task list
+  taskList.removeChild(taskElement);
+
+  // Create task element in done list
+  const doneTaskItem = createTaskElement(task, "done");
+  doneList.appendChild(doneTaskItem);
+}
+
+// Define the addTask function globally
+function addTask() {
+  const taskInput = document.getElementById("task-input");
+  const taskName = taskInput.value.trim();
+  if (taskName !== "") {
+    const newTask = { id: Date.now(), name: taskName };
+    const taskList = document.getElementById("task-list");
+    const taskItem = createTaskElement(newTask, "task");
+    taskList.appendChild(taskItem);
+    taskInput.value = ""; // Clear the input field after adding the task
+  } else {
+    alert("Please enter a task name.");
+  }
+}
+
+// Define the undoTask function globally
+function undoTask(task, taskElement) {
+  const taskList = document.getElementById("task-list");
+  const doneList = document.getElementById("done-list");
+
+  // Remove task from done list
+  doneList.removeChild(taskElement);
+
+  // Find the index to insert the task back into the task list
+  let index = 0;
+  const tasksInTaskList = taskList.querySelectorAll(".task-item");
+  for (const item of tasksInTaskList) {
+    if (item.textContent > task.name) {
+      break;
+    }
+    index++;
+  }
+
+  // Create task element in task list at the correct index
+  const taskItem = createTaskElement(task, "task");
+  if (index === tasksInTaskList.length) {
+    taskList.appendChild(taskItem);
+  } else {
+    taskList.insertBefore(taskItem, tasksInTaskList[index]);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const sampleTasks = [
+    { id: 1, name: "Task 1" },
+    { id: 2, name: "Task 2" },
+    { id: 3, name: "Task 3" },
+  ];
+
+  // Display sample tasks
+  displayTasks(sampleTasks);
+
+  // Function to display tasks in the UI
+  function displayTasks(tasks) {
+    const taskList = document.getElementById("task-list");
+    taskList.innerHTML = "";
+    tasks.forEach((task) => {
+      const taskItem = createTaskElement(task, "task");
+      taskList.appendChild(taskItem);
+    });
+  }
+});
+
+
+
+
+  
+</script>
+  </body>
+</html>
