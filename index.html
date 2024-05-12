@@ -258,9 +258,17 @@
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
     <!-- Your JavaScript Code -->
     <script>
+      const supabaseUrl = "https://otwiiicbhbqyfxmjwqrp.supabase.co";
+      const supabaseKey =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90d2lpaWNiaGJxeWZ4bWp3cXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTU0ODQyMjYsImV4cCI6MjAzMTA2MDIyNn0.k4PTWjWC-qdDiuSxKJBpLo7i0d8iSo2HJdO1iZZ5rLs";
+
+      const { createClient } = supabase;
+      const client = createClient(supabaseUrl, supabaseKey);
+
       var table;
       $(document).ready(function () {
         // Twitch Login Button Click Handler
@@ -291,6 +299,7 @@
           .on("mouseleave", "tr", function () {
             $(this).removeAttr("title");
           });
+
         // Form Toggle Button Click Handler
         $("#openFormButton").click(function () {
           $("#songForm").toggle();
@@ -300,11 +309,28 @@
         });
 
         // Form Submission Handler
-        $("#songForm").submit(function (event) {
+        // Handle form submission
+        $("#songForm").submit(async function (event) {
           event.preventDefault();
-          // Here you can handle the form submission
-          // You can retrieve input values and add a new row to the table dynamically
-          // You may also want to update your JSON data or send it to a server
+
+          const name = $("#name").val();
+          const songUrl = $("#song-url").val();
+
+          try {
+            const { data, error } = await client
+              .from("song_requests")
+              .insert([{ name, song_url: songUrl }]);
+            if (error) {
+              throw error;
+            }
+            alert("Song request submitted successfully!");
+            // Optionally, you can clear the form fields after submission
+            $("#name").val("");
+            $("#song-url").val("");
+          } catch (error) {
+            console.error("Error submitting song request:", error.message);
+            alert("Error submitting song request. Please try again later.");
+          }
         });
 
         // Load Data from JSON
