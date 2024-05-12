@@ -173,11 +173,25 @@
       .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
         cursor: pointer;
       }
+      .queue-button {
+        background-color: rgb(0, 229, 255);
+        color: #fff; /* Button text color */
+        border: none; /* Remove button border */
+        padding: 10px 20px; /* Padding */
+        margin-right: 10px; /* Add margin between buttons */
+        cursor: pointer; /* Cursor style */
+      }
+      .queue-button:hover {
+        background-color: #ff5733; /* Hover background co
+        lor */
+        transform: scale(110%) rotate(-2deg);
+      }
     </style>
   </head>
   <body>
     <header>
       <h1>Sortable Songs Table</h1>
+      <a href="queue"><button class="queue-button">Song Queue</button></a>
       <!-- Song Form -->
       <button id="openFormButton">Add Song</button>
       <form id="songForm" style="display: none">
